@@ -35,6 +35,11 @@ LOGIN_REDIRECT_URL = 'vendor_admin'
 LOGOUT_REDIRECT_URL = 'frontpage'
 
 
+
+SESSION_COOKIE_AGE = 86400
+CART_SESSION_ID= 'cart'
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +52,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'vendor.apps.VendorConfig',
     'product.apps.ProductConfig',
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +79,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'product.context_processors.menu_category',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -89,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'btre',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': '12345678',
         'HOST': 'localhost'
     }
 }

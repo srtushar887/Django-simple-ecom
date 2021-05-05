@@ -66,6 +66,14 @@
             {% endfor %}
 
             <a href="{% url 'contact' %}" class="navbar-item">Contact Us</a>
+        <div class="navbar-item">
+            <a href="{% url 'cart_detail' %}" class="button is-dark">
+                Cart
+                {% if cart %}
+                ({{ cart|length }})
+                {% endif %}
+            </a>
+        </div>
         </div>
     </div>
 </nav>
@@ -106,5 +114,8 @@
     }
 });
 </script>
+{% block script %}
+
+{% endblock %}
 </body>
 </html>

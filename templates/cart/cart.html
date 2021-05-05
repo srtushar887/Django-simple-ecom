@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
       <h1 class="title">Cart</h1>
-
+        
     {% if cart %}
-        <div class="box mb-6">
+    <div class="box mb-6">
             <div class="table">
                 <table class="table is-fullwidth is-striped">
                     <thead>
@@ -42,12 +42,12 @@
                             <td></td>
                             <td><strong>Total cost</strong></td>
                             <td><strong>{{ cart|length}}</strong></td>
-                            <td colspan="2"><strong>${{ cart.get_total_cost }}</strong></td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
         </div>
+
 
         <h2 class="subtitle">Contact information</h2>
 
@@ -155,4 +155,44 @@
     {% else %}
         <p>You don't have any products in your cart!</p>
     {% endif %}
+
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('{{ stripe_pub_key }}');
+        var elements = stripe.elements();
+
+        var card = elements.create('card');
+
+        card.mount('#card-element');
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            stripe.createToken(card).then(function(result) {
+                if (result.error) {
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    stripeTokenHandler(result.token);
+                }
+            });
+        });
+
+        function stripeTokenHandler(token) {
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripe_token');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+
+            form.submit();
+        }
+    </script>
 {% endblock %}
